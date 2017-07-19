@@ -14,12 +14,12 @@ This repository contains Residual Attention Network prototxts. The trained model
 ### Citation
 If you find Residual Attention Network useful in your research, please cite:
 
-@article{wang2017residual,
-  title={Residual Attention Network for Image Classification},
-  author={Wang, Fei and Jiang, Mengqing and Qian, Chen and Yang, Shuo and Li, Cheng and Zhang, Honggang and Wang, Xiaogang and Tang, Xiaoou},
-  journal={arXiv preprint arXiv:1704.06904},
-  year={2017}
-}
+	@article{wang2017residual,
+  		title={Residual Attention Network for Image Classification},
+  		author={Wang, Fei and Jiang, Mengqing and Qian, Chen and Yang, Shuo and Li, Cheng and Zhang, Honggang and Wang, Xiaogang and Tang, Xiaoou},
+  		journal={arXiv preprint arXiv:1704.06904},
+  		year={2017}	
+	}
 
 ### Main Performance
 
