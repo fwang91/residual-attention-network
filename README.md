@@ -9,10 +9,10 @@ By Fei Wang, Mengqing Jiang, Chen Qian, Shuo Yang, Chen Li, Honggang Zhang, Xiao
 
 **Residual Attention Networks** are described in the paper "Residual Attention Network for Image Classification"(https://arxiv.org/pdf/1704.06904.pdf).
 
-This repository contains Residual Attention Network prototxts. The trained model will be released soon. 
+This repository contains the prototxts of "Residual Attention Network". The trained model will be released soon. 
 
 ### Citation
-If you find Residual Attention Network useful in your research, please cite:
+If you find "Residual Attention Network" useful in your research, please cite:
 
 	@article{wang2017residual,
   		title={Residual Attention Network for Image Classification},
@@ -31,12 +31,10 @@ If you find Residual Attention Network useful in your research, please cite:
 
 
 ### Note
-0. We train our models using caffe("https://github.com/buptwangfei/caffe")
+0. We use Caffe ("https://github.com/buptwangfei/caffe") to train our Residual Attention Networks.
 
-1. We refer to "https://github.com/happynear/caffe-windows.git" to implement BN layer which merge computations of "mean" "variance" and "scale" "shift" into one layer. We use moving average in the training stage.
+1. We follow the implementation of BN layer from "https://github.com/happynear/caffe-windows.git", which merge computations of mean, variance, scale and shift into one layer. We use moving average in the training stage.
 
 3. The scale augmentation and ratio augmentation are used in the training process.
 
 4. If you want to train Residual Attention Network, you should use my caffe code and add data augmentation described in the paper. I think it is easy to reproduce the performance on the ImageNet validation dataset.
-
-
