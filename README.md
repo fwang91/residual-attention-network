@@ -1,12 +1,13 @@
 # AttentionNet
 Residual Attention Network for Image Classification (CVPR-2017 Spotlight)
+
 By Fei Wang, Mengqing Jiang, Chen Qian, Shuo Yang, Chen Li, Honggang Zhang, Xiaogang Wang, Xiaoou Tang
 
 
 ### Introduction
 **Residual Attention Network** is a convolutional neural network using attention mechanism which can incorporate with state-of-the-art feed forward network architecture in an end-to-end training fashion.
 
-**Residual Attention Network** are described in the paper "Residual Attention Network for Image Classification"(https://arxiv.org/pdf/1704.06904.pdf).
+**Residual Attention Networks** are described in the paper "Residual Attention Network for Image Classification"(https://arxiv.org/pdf/1704.06904.pdf).
 
 This repository contains Residual Attention Network prototxts. The trained model will be released soon. 
 
@@ -25,9 +26,9 @@ If you find Residual Attention Network useful in your research, please cite:
 
 |    Network       |Test Size|  top-1  |  top-5  |
 |------------------|---------|---------|---------|
-| Attention-56     | 224     |  21.76% |   5.9%  |
-| AttentionNeXt-56 | 224     |  21.2%  |   5.6%  |
-| Attention-92     | 320     |  19.5%  |   4.8%  |
+| Attention-56     | 224\*224|  21.76% |   5.9%  |
+| AttentionNeXt-56 | 224\*224|  21.2%  |   5.6%  |
+| Attention-92     | 320\*320|  19.5%  |   4.8%  |
 
 
 ### Note
