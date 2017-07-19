@@ -1,5 +1,5 @@
 # AttentionNet
-Residual Attention Network for Image Classification (CVPR-2017 Spotlight)
+Residual Attention Network for Image Classification (**CVPR-2017 Spotlight**)
 
 By Fei Wang, Mengqing Jiang, Chen Qian, Shuo Yang, Chen Li, Honggang Zhang, Xiaogang Wang, Xiaoou Tang
 
@@ -22,7 +22,6 @@ If you find Residual Attention Network useful in your research, please cite:
 }
 
 ### Main Performance
-### Main Results
 
 |    Network       |Test Size|  top-1  |  top-5  |
 |------------------|---------|---------|---------|
