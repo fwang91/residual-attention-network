@@ -1,0 +1,6558 @@
+name: "Attention-92"
+input: "data"
+input_dim: 1
+input_dim: 3
+input_dim: 224
+input_dim: 224
+
+layer{
+	name: "conv1"
+	type: "Convolution"
+	bottom: "data"
+	top: "conv1"
+	convolution_param {
+		num_output: 64
+		pad: 3
+		kernel_size: 7
+		stride: 2
+		bias_term: false
+	}
+}
+
+layer{
+	name: "conv1/bn"
+	type: "BN"
+	bottom: "conv1"
+	top: "conv1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "conv1/bn/relu"
+	type: "ReLU"
+	bottom: "conv1/bn"
+	top: "conv1/bn"
+}
+
+layer{
+	name: "pool1_3x3_s2"
+	type: "Pooling"
+	bottom: "conv1/bn"
+	top: "pool1_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "pool1_3x3_s2/bn"
+	type: "BN"
+	bottom: "pool1_3x3_s2"
+	top: "pool1_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pool1_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "pool1_3x3_s2/bn"
+	top: "pool1_3x3_s2/bn"
+}
+
+layer{
+	name: "pre_res_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "pool1_3x3_s2/bn"
+	top: "pre_res_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "pre_res_1/branch1/conv1_1x1"
+	top: "pre_res_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_1/branch1/conv1_1x1/bn"
+	top: "pre_res_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "pre_res_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "pre_res_1/branch1/conv1_1x1/bn"
+	top: "pre_res_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "pre_res_1/branch1/conv2_3x3"
+	top: "pre_res_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_1/branch1/conv2_3x3/bn"
+	top: "pre_res_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "pre_res_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "pre_res_1/branch1/conv2_3x3/bn"
+	top: "pre_res_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_1/branch2/conv1_1x1"
+	type: "Convolution"
+	bottom: "pool1_3x3_s2/bn"
+	top: "pre_res_1/branch2/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_1"
+	type: "Eltwise"
+	bottom: "pre_res_1/branch2/conv1_1x1"
+	bottom: "pre_res_1/branch1/conv3_1x1"
+	top: "pre_res_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "pre_res_1/bn"
+	type: "BN"
+	bottom: "pre_res_1"
+	top: "pre_res_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_1/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_1/bn"
+	top: "pre_res_1/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "pre_res_1/bn"
+	top: "AttentionA_1/trunk/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res1/branch1/conv1_1x1"
+	top: "AttentionA_1/trunk/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/trunk/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/trunk/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res1/branch1/conv2_3x3"
+	top: "AttentionA_1/trunk/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/trunk/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/trunk/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/trunk/res1/branch1/conv3_1x1"
+	bottom: "pre_res_1"
+	top: "AttentionA_1/trunk/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res1"
+	top: "AttentionA_1/trunk/res1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res1/bn"
+	top: "AttentionA_1/trunk/res1/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res1/bn"
+	top: "AttentionA_1/trunk/res2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res2/branch1/conv1_1x1"
+	top: "AttentionA_1/trunk/res2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/trunk/res2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/trunk/res2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res2/branch1/conv2_3x3"
+	top: "AttentionA_1/trunk/res2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/trunk/res2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/trunk/res2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2"
+	type: "Eltwise"
+	bottom: "AttentionA_1/trunk/res2/branch1/conv3_1x1"
+	bottom: "AttentionA_1/trunk/res1"
+	top: "AttentionA_1/trunk/res2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res2"
+	top: "AttentionA_1/trunk/res2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res2/bn"
+	top: "AttentionA_1/trunk/res2/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res2/bn"
+	top: "AttentionA_1/trunk/res3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res3/branch1/conv1_1x1"
+	top: "AttentionA_1/trunk/res3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/trunk/res3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/trunk/res3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/trunk/res3/branch1/conv2_3x3"
+	top: "AttentionA_1/trunk/res3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/trunk/res3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/trunk/res3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/trunk/res3"
+	type: "Eltwise"
+	bottom: "AttentionA_1/trunk/res3/branch1/conv3_1x1"
+	bottom: "AttentionA_1/trunk/res2"
+	top: "AttentionA_1/trunk/res3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool1_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionA_1/trunk/res1"
+	top: "AttentionA_1/mask/down_sample/pool1_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool1_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionA_1/mask/down_sample/pool1_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool1_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionA_1/mask/down_sample/pool1_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionA_1/mask/down_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool2_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionA_1/mask/down_sample/res1_1"
+	top: "AttentionA_1/mask/down_sample/pool2_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool2_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/pool2_3x3_s2"
+	top: "AttentionA_1/mask/down_sample/pool2_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool2_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/pool2_3x3_s2/bn"
+	top: "AttentionA_1/mask/down_sample/pool2_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/pool2_3x3_s2/bn"
+	top: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res2_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/down_sample/pool2_3x3_s2"
+	top: "AttentionA_1/mask/down_sample/res2_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool3_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionA_1/mask/down_sample/res2_1"
+	top: "AttentionA_1/mask/down_sample/pool3_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool3_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/pool3_3x3_s2"
+	top: "AttentionA_1/mask/down_sample/pool3_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/pool3_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/pool3_3x3_s2/bn"
+	top: "AttentionA_1/mask/down_sample/pool3_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/pool3_3x3_s2/bn"
+	top: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res3_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/down_sample/pool3_3x3_s2"
+	top: "AttentionA_1/mask/down_sample/res3_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res3_1"
+	top: "AttentionA_1/mask/down_sample/res3_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/bn"
+	top: "AttentionA_1/mask/down_sample/res3_1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res3_1/bn"
+	top: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res3_2/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res3_2/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/down_sample/res3_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res3_2"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/down_sample/res3_2/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/down_sample/res3_1"
+	top: "AttentionA_1/mask/down_sample/res3_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/interp_3"
+	type: "Interp"
+	bottom: "AttentionA_1/mask/down_sample/res3_2"
+	bottom: "AttentionA_1/mask/down_sample/res2_1"
+	top: "AttentionA_1/mask/up_sample/interp_3"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res2_1"
+	top: "AttentionA_1/mask/down_sample/res2_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res2_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/bn"
+	top: "AttentionA_1/mask/down_sample/res2_1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res2_1/bn"
+	top: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/skip/res2/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/skip/res2/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/skip/res2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res2"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/skip/res2/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/down_sample/res2_1"
+	top: "AttentionA_1/mask/skip/res2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample2"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/skip/res2"
+	bottom: "AttentionA_1/mask/up_sample/interp_3"
+	top: "AttentionA_1/mask/up_sample2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample2/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/up_sample2"
+	top: "AttentionA_1/mask/up_sample2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/up_sample2/bn"
+	top: "AttentionA_1/mask/up_sample2/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/up_sample2/bn"
+	top: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/up_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/up_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/up_sample/res2_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res2_1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/up_sample/res2_1/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/up_sample2"
+	top: "AttentionA_1/mask/up_sample/res2_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/interp_2"
+	type: "Interp"
+	bottom: "AttentionA_1/mask/up_sample/res2_1"
+	bottom: "AttentionA_1/mask/down_sample/res1_1"
+	top: "AttentionA_1/mask/up_sample/interp_2"
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/down_sample/res1_1"
+	top: "AttentionA_1/mask/down_sample/res1_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/down_sample/res1_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/bn"
+	top: "AttentionA_1/mask/down_sample/res1_1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/down_sample/res1_1/bn"
+	top: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/skip/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/skip/res1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/skip/res1/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/down_sample/res1_1"
+	top: "AttentionA_1/mask/skip/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/skip/res1"
+	bottom: "AttentionA_1/mask/up_sample/interp_2"
+	top: "AttentionA_1/mask/up_sample1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/up_sample1"
+	top: "AttentionA_1/mask/up_sample1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/up_sample1/bn"
+	top: "AttentionA_1/mask/up_sample1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/up_sample1/bn"
+	top: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/mask/up_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/mask/up_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionA_1/mask/up_sample1"
+	top: "AttentionA_1/mask/up_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/interp_1"
+	type: "Interp"
+	bottom: "AttentionA_1/mask/up_sample/res1_1"
+	bottom: "AttentionA_1/trunk/res3"
+	top: "AttentionA_1/mask/up_sample/interp_1"
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/interp_1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/up_sample/interp_1"
+	top: "AttentionA_1/mask/up_sample/interp_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/up_sample/interp_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/up_sample/interp_1/bn"
+	top: "AttentionA_1/mask/up_sample/interp_1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/linear_1"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/up_sample/interp_1/bn"
+	top: "AttentionA_1/mask/linear_1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/linear_1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/mask/linear_1"
+	top: "AttentionA_1/mask/linear_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask/linear_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/mask/linear_1/bn"
+	top: "AttentionA_1/mask/linear_1/bn"
+}
+
+layer{
+	name: "AttentionA_1/mask/linear_2"
+	type: "Convolution"
+	bottom: "AttentionA_1/mask/linear_1/bn"
+	top: "AttentionA_1/mask/linear_2"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/mask"
+	type: "TanH"
+	bottom: "AttentionA_1/mask/linear_2"
+	top: "AttentionA_1/mask"
+}
+
+layer{
+	name: "AttentionA_1_residual"
+	type: "Eltwise"
+	bottom: "AttentionA_1/trunk/res3"
+	bottom: "AttentionA_1/mask"
+	top: "AttentionA_1_residual"
+	eltwise_param {
+		operation: PROD
+	}
+}
+
+layer{
+	name: "AttentionA_1/fusion"
+	type: "Eltwise"
+	bottom: "AttentionA_1_residual"
+	bottom: "AttentionA_1/trunk/res3"
+	top: "AttentionA_1/fusion"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/fusion/bn"
+	type: "BN"
+	bottom: "AttentionA_1/fusion"
+	top: "AttentionA_1/fusion/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/fusion/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/fusion/bn"
+	top: "AttentionA_1/fusion/bn"
+}
+
+layer{
+	name: "AttentionA_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/fusion/bn"
+	top: "AttentionA_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 64
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionA_1/branch1/conv1_1x1"
+	top: "AttentionA_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionA_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionA_1/branch1/conv1_1x1/bn"
+	top: "AttentionA_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 64
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionA_1/branch1/conv2_3x3"
+	top: "AttentionA_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionA_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/branch1/conv2_3x3/bn"
+	top: "AttentionA_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionA_1"
+	type: "Eltwise"
+	bottom: "AttentionA_1/branch1/conv3_1x1"
+	bottom: "AttentionA_1/fusion"
+	top: "AttentionA_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionA_1/bn"
+	type: "BN"
+	bottom: "AttentionA_1"
+	top: "AttentionA_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionA_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionA_1/bn"
+	top: "AttentionA_1/bn"
+}
+
+layer{
+	name: "pre_res_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/bn"
+	top: "pre_res_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "pre_res_2/branch1/conv1_1x1"
+	top: "pre_res_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_2/branch1/conv1_1x1/bn"
+	top: "pre_res_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "pre_res_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "pre_res_2/branch1/conv1_1x1/bn"
+	top: "pre_res_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 2
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "pre_res_2/branch1/conv2_3x3"
+	top: "pre_res_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_2/branch1/conv2_3x3/bn"
+	top: "pre_res_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "pre_res_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "pre_res_2/branch1/conv2_3x3/bn"
+	top: "pre_res_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_2/branch2/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionA_1/bn"
+	top: "pre_res_2/branch2/conv1_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 2
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_2"
+	type: "Eltwise"
+	bottom: "pre_res_2/branch2/conv1_1x1"
+	bottom: "pre_res_2/branch1/conv3_1x1"
+	top: "pre_res_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "pre_res_2/bn"
+	type: "BN"
+	bottom: "pre_res_2"
+	top: "pre_res_2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_2/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_2/bn"
+	top: "pre_res_2/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "pre_res_2/bn"
+	top: "AttentionB_1/trunk/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res1/branch1/conv1_1x1"
+	top: "AttentionB_1/trunk/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/trunk/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/trunk/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res1/branch1/conv2_3x3"
+	top: "AttentionB_1/trunk/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/trunk/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/trunk/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1"
+	type: "Eltwise"
+	bottom: "AttentionB_1/trunk/res1/branch1/conv3_1x1"
+	bottom: "pre_res_2"
+	top: "AttentionB_1/trunk/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res1"
+	top: "AttentionB_1/trunk/res1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res1/bn"
+	top: "AttentionB_1/trunk/res1/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res1/bn"
+	top: "AttentionB_1/trunk/res2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res2/branch1/conv1_1x1"
+	top: "AttentionB_1/trunk/res2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/trunk/res2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/trunk/res2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res2/branch1/conv2_3x3"
+	top: "AttentionB_1/trunk/res2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/trunk/res2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/trunk/res2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2"
+	type: "Eltwise"
+	bottom: "AttentionB_1/trunk/res2/branch1/conv3_1x1"
+	bottom: "AttentionB_1/trunk/res1"
+	top: "AttentionB_1/trunk/res2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res2"
+	top: "AttentionB_1/trunk/res2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res2/bn"
+	top: "AttentionB_1/trunk/res2/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res2/bn"
+	top: "AttentionB_1/trunk/res3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res3/branch1/conv1_1x1"
+	top: "AttentionB_1/trunk/res3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/trunk/res3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/trunk/res3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/trunk/res3/branch1/conv2_3x3"
+	top: "AttentionB_1/trunk/res3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/trunk/res3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/trunk/res3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/trunk/res3"
+	type: "Eltwise"
+	bottom: "AttentionB_1/trunk/res3/branch1/conv3_1x1"
+	bottom: "AttentionB_1/trunk/res2"
+	top: "AttentionB_1/trunk/res3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/pool1_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionB_1/trunk/res1"
+	top: "AttentionB_1/mask/down_sample/pool1_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/pool1_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionB_1/mask/down_sample/pool1_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/pool1_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionB_1/mask/down_sample/pool1_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionB_1/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionB_1/mask/down_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/pool2_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionB_1/mask/down_sample/res1_1"
+	top: "AttentionB_1/mask/down_sample/pool2_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/pool2_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/pool2_3x3_s2"
+	top: "AttentionB_1/mask/down_sample/pool2_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/pool2_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/pool2_3x3_s2/bn"
+	top: "AttentionB_1/mask/down_sample/pool2_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/pool2_3x3_s2/bn"
+	top: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1"
+	top: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3"
+	top: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/down_sample/res2_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1"
+	type: "Eltwise"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/branch1/conv3_1x1"
+	bottom: "AttentionB_1/mask/down_sample/pool2_3x3_s2"
+	top: "AttentionB_1/mask/down_sample/res2_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res2_1"
+	top: "AttentionB_1/mask/down_sample/res2_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/bn"
+	top: "AttentionB_1/mask/down_sample/res2_1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res2_1/bn"
+	top: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1"
+	top: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3"
+	top: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/down_sample/res2_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res2_2"
+	type: "Eltwise"
+	bottom: "AttentionB_1/mask/down_sample/res2_2/branch1/conv3_1x1"
+	bottom: "AttentionB_1/mask/down_sample/res2_1"
+	top: "AttentionB_1/mask/down_sample/res2_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/interp_2"
+	type: "Interp"
+	bottom: "AttentionB_1/mask/down_sample/res2_2"
+	bottom: "AttentionB_1/mask/down_sample/res1_1"
+	top: "AttentionB_1/mask/up_sample/interp_2"
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/down_sample/res1_1"
+	top: "AttentionB_1/mask/down_sample/res1_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/down_sample/res1_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/bn"
+	top: "AttentionB_1/mask/down_sample/res1_1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/down_sample/res1_1/bn"
+	top: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1"
+	top: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/skip/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3"
+	top: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/skip/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/skip/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/skip/res1"
+	type: "Eltwise"
+	bottom: "AttentionB_1/mask/skip/res1/branch1/conv3_1x1"
+	bottom: "AttentionB_1/mask/down_sample/res1_1"
+	top: "AttentionB_1/mask/skip/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample1"
+	type: "Eltwise"
+	bottom: "AttentionB_1/mask/skip/res1"
+	bottom: "AttentionB_1/mask/up_sample/interp_2"
+	top: "AttentionB_1/mask/up_sample1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/up_sample1"
+	top: "AttentionB_1/mask/up_sample1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/up_sample1/bn"
+	top: "AttentionB_1/mask/up_sample1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/up_sample1/bn"
+	top: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/mask/up_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionB_1/mask/up_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionB_1/mask/up_sample1"
+	top: "AttentionB_1/mask/up_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/interp_1"
+	type: "Interp"
+	bottom: "AttentionB_1/mask/up_sample/res1_1"
+	bottom: "AttentionB_1/trunk/res3"
+	top: "AttentionB_1/mask/up_sample/interp_1"
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/interp_1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/up_sample/interp_1"
+	top: "AttentionB_1/mask/up_sample/interp_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/up_sample/interp_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/up_sample/interp_1/bn"
+	top: "AttentionB_1/mask/up_sample/interp_1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/linear_1"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/up_sample/interp_1/bn"
+	top: "AttentionB_1/mask/linear_1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/linear_1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/mask/linear_1"
+	top: "AttentionB_1/mask/linear_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask/linear_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/mask/linear_1/bn"
+	top: "AttentionB_1/mask/linear_1/bn"
+}
+
+layer{
+	name: "AttentionB_1/mask/linear_2"
+	type: "Convolution"
+	bottom: "AttentionB_1/mask/linear_1/bn"
+	top: "AttentionB_1/mask/linear_2"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/mask"
+	type: "TanH"
+	bottom: "AttentionB_1/mask/linear_2"
+	top: "AttentionB_1/mask"
+}
+
+layer{
+	name: "AttentionB_1_residual"
+	type: "Eltwise"
+	bottom: "AttentionB_1/trunk/res3"
+	bottom: "AttentionB_1/mask"
+	top: "AttentionB_1_residual"
+	eltwise_param {
+		operation: PROD
+	}
+}
+
+layer{
+	name: "AttentionB_1/fusion"
+	type: "Eltwise"
+	bottom: "AttentionB_1_residual"
+	bottom: "AttentionB_1/trunk/res3"
+	top: "AttentionB_1/fusion"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/fusion/bn"
+	type: "BN"
+	bottom: "AttentionB_1/fusion"
+	top: "AttentionB_1/fusion/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/fusion/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/fusion/bn"
+	top: "AttentionB_1/fusion/bn"
+}
+
+layer{
+	name: "AttentionB_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/fusion/bn"
+	top: "AttentionB_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_1/branch1/conv1_1x1"
+	top: "AttentionB_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_1/branch1/conv2_3x3"
+	top: "AttentionB_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_1"
+	type: "Eltwise"
+	bottom: "AttentionB_1/branch1/conv3_1x1"
+	bottom: "AttentionB_1/fusion"
+	top: "AttentionB_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_1/bn"
+	type: "BN"
+	bottom: "AttentionB_1"
+	top: "AttentionB_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_1/bn"
+	top: "AttentionB_1/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_1/bn"
+	top: "AttentionB_2/trunk/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res1/branch1/conv1_1x1"
+	top: "AttentionB_2/trunk/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/trunk/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/trunk/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res1/branch1/conv2_3x3"
+	top: "AttentionB_2/trunk/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/trunk/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/trunk/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1"
+	type: "Eltwise"
+	bottom: "AttentionB_2/trunk/res1/branch1/conv3_1x1"
+	bottom: "AttentionB_1"
+	top: "AttentionB_2/trunk/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res1"
+	top: "AttentionB_2/trunk/res1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res1/bn"
+	top: "AttentionB_2/trunk/res1/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res1/bn"
+	top: "AttentionB_2/trunk/res2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res2/branch1/conv1_1x1"
+	top: "AttentionB_2/trunk/res2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/trunk/res2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/trunk/res2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res2/branch1/conv2_3x3"
+	top: "AttentionB_2/trunk/res2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/trunk/res2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/trunk/res2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2"
+	type: "Eltwise"
+	bottom: "AttentionB_2/trunk/res2/branch1/conv3_1x1"
+	bottom: "AttentionB_2/trunk/res1"
+	top: "AttentionB_2/trunk/res2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res2"
+	top: "AttentionB_2/trunk/res2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res2/bn"
+	top: "AttentionB_2/trunk/res2/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res2/bn"
+	top: "AttentionB_2/trunk/res3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res3/branch1/conv1_1x1"
+	top: "AttentionB_2/trunk/res3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/trunk/res3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/trunk/res3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/trunk/res3/branch1/conv2_3x3"
+	top: "AttentionB_2/trunk/res3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/trunk/res3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/trunk/res3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/trunk/res3"
+	type: "Eltwise"
+	bottom: "AttentionB_2/trunk/res3/branch1/conv3_1x1"
+	bottom: "AttentionB_2/trunk/res2"
+	top: "AttentionB_2/trunk/res3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/pool1_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionB_2/trunk/res1"
+	top: "AttentionB_2/mask/down_sample/pool1_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/pool1_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionB_2/mask/down_sample/pool1_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/pool1_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionB_2/mask/down_sample/pool1_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/down_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionB_2/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionB_2/mask/down_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/pool2_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionB_2/mask/down_sample/res1_1"
+	top: "AttentionB_2/mask/down_sample/pool2_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/pool2_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/pool2_3x3_s2"
+	top: "AttentionB_2/mask/down_sample/pool2_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/pool2_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/pool2_3x3_s2/bn"
+	top: "AttentionB_2/mask/down_sample/pool2_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/pool2_3x3_s2/bn"
+	top: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1"
+	top: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3"
+	top: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/down_sample/res2_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1"
+	type: "Eltwise"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/branch1/conv3_1x1"
+	bottom: "AttentionB_2/mask/down_sample/pool2_3x3_s2"
+	top: "AttentionB_2/mask/down_sample/res2_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res2_1"
+	top: "AttentionB_2/mask/down_sample/res2_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/bn"
+	top: "AttentionB_2/mask/down_sample/res2_1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res2_1/bn"
+	top: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1"
+	top: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res2_2/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3"
+	top: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res2_2/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/down_sample/res2_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res2_2"
+	type: "Eltwise"
+	bottom: "AttentionB_2/mask/down_sample/res2_2/branch1/conv3_1x1"
+	bottom: "AttentionB_2/mask/down_sample/res2_1"
+	top: "AttentionB_2/mask/down_sample/res2_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/interp_2"
+	type: "Interp"
+	bottom: "AttentionB_2/mask/down_sample/res2_2"
+	bottom: "AttentionB_2/mask/down_sample/res1_1"
+	top: "AttentionB_2/mask/up_sample/interp_2"
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/down_sample/res1_1"
+	top: "AttentionB_2/mask/down_sample/res1_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/down_sample/res1_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/bn"
+	top: "AttentionB_2/mask/down_sample/res1_1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/down_sample/res1_1/bn"
+	top: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1"
+	top: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/skip/res1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3"
+	top: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/skip/res1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/skip/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/skip/res1"
+	type: "Eltwise"
+	bottom: "AttentionB_2/mask/skip/res1/branch1/conv3_1x1"
+	bottom: "AttentionB_2/mask/down_sample/res1_1"
+	top: "AttentionB_2/mask/skip/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample1"
+	type: "Eltwise"
+	bottom: "AttentionB_2/mask/skip/res1"
+	bottom: "AttentionB_2/mask/up_sample/interp_2"
+	top: "AttentionB_2/mask/up_sample1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/up_sample1"
+	top: "AttentionB_2/mask/up_sample1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/up_sample1/bn"
+	top: "AttentionB_2/mask/up_sample1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/up_sample1/bn"
+	top: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/up_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/up_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/mask/up_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionB_2/mask/up_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionB_2/mask/up_sample1"
+	top: "AttentionB_2/mask/up_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/interp_1"
+	type: "Interp"
+	bottom: "AttentionB_2/mask/up_sample/res1_1"
+	bottom: "AttentionB_2/trunk/res3"
+	top: "AttentionB_2/mask/up_sample/interp_1"
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/interp_1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/up_sample/interp_1"
+	top: "AttentionB_2/mask/up_sample/interp_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/up_sample/interp_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/up_sample/interp_1/bn"
+	top: "AttentionB_2/mask/up_sample/interp_1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/linear_1"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/up_sample/interp_1/bn"
+	top: "AttentionB_2/mask/linear_1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/linear_1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/mask/linear_1"
+	top: "AttentionB_2/mask/linear_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask/linear_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/mask/linear_1/bn"
+	top: "AttentionB_2/mask/linear_1/bn"
+}
+
+layer{
+	name: "AttentionB_2/mask/linear_2"
+	type: "Convolution"
+	bottom: "AttentionB_2/mask/linear_1/bn"
+	top: "AttentionB_2/mask/linear_2"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/mask"
+	type: "TanH"
+	bottom: "AttentionB_2/mask/linear_2"
+	top: "AttentionB_2/mask"
+}
+
+layer{
+	name: "AttentionB_2_residual"
+	type: "Eltwise"
+	bottom: "AttentionB_2/trunk/res3"
+	bottom: "AttentionB_2/mask"
+	top: "AttentionB_2_residual"
+	eltwise_param {
+		operation: PROD
+	}
+}
+
+layer{
+	name: "AttentionB_2/fusion"
+	type: "Eltwise"
+	bottom: "AttentionB_2_residual"
+	bottom: "AttentionB_2/trunk/res3"
+	top: "AttentionB_2/fusion"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/fusion/bn"
+	type: "BN"
+	bottom: "AttentionB_2/fusion"
+	top: "AttentionB_2/fusion/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/fusion/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/fusion/bn"
+	top: "AttentionB_2/fusion/bn"
+}
+
+layer{
+	name: "AttentionB_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/fusion/bn"
+	top: "AttentionB_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 128
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionB_2/branch1/conv1_1x1"
+	top: "AttentionB_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionB_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionB_2/branch1/conv1_1x1/bn"
+	top: "AttentionB_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 128
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionB_2/branch1/conv2_3x3"
+	top: "AttentionB_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionB_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/branch1/conv2_3x3/bn"
+	top: "AttentionB_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionB_2"
+	type: "Eltwise"
+	bottom: "AttentionB_2/branch1/conv3_1x1"
+	bottom: "AttentionB_2/fusion"
+	top: "AttentionB_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionB_2/bn"
+	type: "BN"
+	bottom: "AttentionB_2"
+	top: "AttentionB_2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionB_2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionB_2/bn"
+	top: "AttentionB_2/bn"
+}
+
+layer{
+	name: "pre_res_3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/bn"
+	top: "pre_res_3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "pre_res_3/branch1/conv1_1x1"
+	top: "pre_res_3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_3/branch1/conv1_1x1/bn"
+	top: "pre_res_3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "pre_res_3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "pre_res_3/branch1/conv1_1x1/bn"
+	top: "pre_res_3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 2
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "pre_res_3/branch1/conv2_3x3"
+	top: "pre_res_3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_3/branch1/conv2_3x3/bn"
+	top: "pre_res_3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "pre_res_3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "pre_res_3/branch1/conv2_3x3/bn"
+	top: "pre_res_3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_3/branch2/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionB_2/bn"
+	top: "pre_res_3/branch2/conv1_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 2
+		bias_term: false
+	}
+}
+
+layer{
+	name: "pre_res_3"
+	type: "Eltwise"
+	bottom: "pre_res_3/branch2/conv1_1x1"
+	bottom: "pre_res_3/branch1/conv3_1x1"
+	top: "pre_res_3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "pre_res_3/bn"
+	type: "BN"
+	bottom: "pre_res_3"
+	top: "pre_res_3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "pre_res_3/bn/relu"
+	type: "ReLU"
+	bottom: "pre_res_3/bn"
+	top: "pre_res_3/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "pre_res_3/bn"
+	top: "AttentionC_1/trunk/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res1/branch1/conv1_1x1"
+	top: "AttentionC_1/trunk/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/trunk/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/trunk/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res1/branch1/conv2_3x3"
+	top: "AttentionC_1/trunk/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/trunk/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/trunk/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1"
+	type: "Eltwise"
+	bottom: "AttentionC_1/trunk/res1/branch1/conv3_1x1"
+	bottom: "pre_res_3"
+	top: "AttentionC_1/trunk/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res1"
+	top: "AttentionC_1/trunk/res1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res1/bn"
+	top: "AttentionC_1/trunk/res1/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res1/bn"
+	top: "AttentionC_1/trunk/res2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res2/branch1/conv1_1x1"
+	top: "AttentionC_1/trunk/res2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/trunk/res2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/trunk/res2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res2/branch1/conv2_3x3"
+	top: "AttentionC_1/trunk/res2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/trunk/res2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/trunk/res2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2"
+	type: "Eltwise"
+	bottom: "AttentionC_1/trunk/res2/branch1/conv3_1x1"
+	bottom: "AttentionC_1/trunk/res1"
+	top: "AttentionC_1/trunk/res2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res2"
+	top: "AttentionC_1/trunk/res2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res2/bn"
+	top: "AttentionC_1/trunk/res2/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res2/bn"
+	top: "AttentionC_1/trunk/res3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res3/branch1/conv1_1x1"
+	top: "AttentionC_1/trunk/res3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/trunk/res3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/trunk/res3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_1/trunk/res3/branch1/conv2_3x3"
+	top: "AttentionC_1/trunk/res3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/trunk/res3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/trunk/res3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/trunk/res3"
+	type: "Eltwise"
+	bottom: "AttentionC_1/trunk/res3/branch1/conv3_1x1"
+	bottom: "AttentionC_1/trunk/res2"
+	top: "AttentionC_1/trunk/res3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/pool1_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionC_1/trunk/res1"
+	top: "AttentionC_1/mask/down_sample/pool1_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/pool1_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionC_1/mask/down_sample/pool1_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/pool1_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionC_1/mask/down_sample/pool1_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionC_1/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionC_1/mask/down_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/down_sample/res1_1"
+	top: "AttentionC_1/mask/down_sample/res1_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/bn"
+	top: "AttentionC_1/mask/down_sample/res1_1/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/down_sample/res1_1/bn"
+	top: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1"
+	top: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3"
+	top: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/mask/down_sample/res1_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/down_sample/res1_2"
+	type: "Eltwise"
+	bottom: "AttentionC_1/mask/down_sample/res1_2/branch1/conv3_1x1"
+	bottom: "AttentionC_1/mask/down_sample/res1_1"
+	top: "AttentionC_1/mask/down_sample/res1_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/up_sample/interp_1"
+	type: "Interp"
+	bottom: "AttentionC_1/mask/down_sample/res1_2"
+	bottom: "AttentionC_1/trunk/res3"
+	top: "AttentionC_1/mask/up_sample/interp_1"
+}
+
+layer{
+	name: "AttentionC_1/mask/up_sample/interp_1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/up_sample/interp_1"
+	top: "AttentionC_1/mask/up_sample/interp_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/up_sample/interp_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/up_sample/interp_1/bn"
+	top: "AttentionC_1/mask/up_sample/interp_1/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/linear_1"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/up_sample/interp_1/bn"
+	top: "AttentionC_1/mask/linear_1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/linear_1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/mask/linear_1"
+	top: "AttentionC_1/mask/linear_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask/linear_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/mask/linear_1/bn"
+	top: "AttentionC_1/mask/linear_1/bn"
+}
+
+layer{
+	name: "AttentionC_1/mask/linear_2"
+	type: "Convolution"
+	bottom: "AttentionC_1/mask/linear_1/bn"
+	top: "AttentionC_1/mask/linear_2"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/mask"
+	type: "TanH"
+	bottom: "AttentionC_1/mask/linear_2"
+	top: "AttentionC_1/mask"
+}
+
+layer{
+	name: "AttentionC_1_residual"
+	type: "Eltwise"
+	bottom: "AttentionC_1/trunk/res3"
+	bottom: "AttentionC_1/mask"
+	top: "AttentionC_1_residual"
+	eltwise_param {
+		operation: PROD
+	}
+}
+
+layer{
+	name: "AttentionC_1/fusion"
+	type: "Eltwise"
+	bottom: "AttentionC_1_residual"
+	bottom: "AttentionC_1/trunk/res3"
+	top: "AttentionC_1/fusion"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_1/fusion/bn"
+	type: "BN"
+	bottom: "AttentionC_1/fusion"
+	top: "AttentionC_1/fusion/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/fusion/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/fusion/bn"
+	top: "AttentionC_1/fusion/bn"
+}
+
+layer{
+	name: "AttentionC_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/fusion/bn"
+	top: "AttentionC_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_1/branch1/conv1_1x1"
+	top: "AttentionC_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_1/branch1/conv2_3x3"
+	top: "AttentionC_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_1"
+	type: "Eltwise"
+	bottom: "AttentionC_1/branch1/conv3_1x1"
+	bottom: "AttentionC_1/fusion"
+	top: "AttentionC_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_1/bn"
+	type: "BN"
+	bottom: "AttentionC_1"
+	top: "AttentionC_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_1/bn"
+	top: "AttentionC_1/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_1/bn"
+	top: "AttentionC_2/trunk/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res1/branch1/conv1_1x1"
+	top: "AttentionC_2/trunk/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/trunk/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/trunk/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res1/branch1/conv2_3x3"
+	top: "AttentionC_2/trunk/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/trunk/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/trunk/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1"
+	type: "Eltwise"
+	bottom: "AttentionC_2/trunk/res1/branch1/conv3_1x1"
+	bottom: "AttentionC_1"
+	top: "AttentionC_2/trunk/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res1"
+	top: "AttentionC_2/trunk/res1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res1/bn"
+	top: "AttentionC_2/trunk/res1/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res1/bn"
+	top: "AttentionC_2/trunk/res2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res2/branch1/conv1_1x1"
+	top: "AttentionC_2/trunk/res2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/trunk/res2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/trunk/res2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res2/branch1/conv2_3x3"
+	top: "AttentionC_2/trunk/res2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/trunk/res2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/trunk/res2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2"
+	type: "Eltwise"
+	bottom: "AttentionC_2/trunk/res2/branch1/conv3_1x1"
+	bottom: "AttentionC_2/trunk/res1"
+	top: "AttentionC_2/trunk/res2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res2"
+	top: "AttentionC_2/trunk/res2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res2/bn"
+	top: "AttentionC_2/trunk/res2/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res2/bn"
+	top: "AttentionC_2/trunk/res3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res3/branch1/conv1_1x1"
+	top: "AttentionC_2/trunk/res3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/trunk/res3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/trunk/res3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_2/trunk/res3/branch1/conv2_3x3"
+	top: "AttentionC_2/trunk/res3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/trunk/res3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/trunk/res3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/trunk/res3"
+	type: "Eltwise"
+	bottom: "AttentionC_2/trunk/res3/branch1/conv3_1x1"
+	bottom: "AttentionC_2/trunk/res2"
+	top: "AttentionC_2/trunk/res3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/pool1_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionC_2/trunk/res1"
+	top: "AttentionC_2/mask/down_sample/pool1_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/pool1_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionC_2/mask/down_sample/pool1_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/pool1_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionC_2/mask/down_sample/pool1_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/mask/down_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionC_2/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionC_2/mask/down_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/down_sample/res1_1"
+	top: "AttentionC_2/mask/down_sample/res1_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/bn"
+	top: "AttentionC_2/mask/down_sample/res1_1/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/down_sample/res1_1/bn"
+	top: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1"
+	top: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3"
+	top: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/mask/down_sample/res1_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/down_sample/res1_2"
+	type: "Eltwise"
+	bottom: "AttentionC_2/mask/down_sample/res1_2/branch1/conv3_1x1"
+	bottom: "AttentionC_2/mask/down_sample/res1_1"
+	top: "AttentionC_2/mask/down_sample/res1_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/up_sample/interp_1"
+	type: "Interp"
+	bottom: "AttentionC_2/mask/down_sample/res1_2"
+	bottom: "AttentionC_2/trunk/res3"
+	top: "AttentionC_2/mask/up_sample/interp_1"
+}
+
+layer{
+	name: "AttentionC_2/mask/up_sample/interp_1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/up_sample/interp_1"
+	top: "AttentionC_2/mask/up_sample/interp_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/up_sample/interp_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/up_sample/interp_1/bn"
+	top: "AttentionC_2/mask/up_sample/interp_1/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/linear_1"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/up_sample/interp_1/bn"
+	top: "AttentionC_2/mask/linear_1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/linear_1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/mask/linear_1"
+	top: "AttentionC_2/mask/linear_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask/linear_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/mask/linear_1/bn"
+	top: "AttentionC_2/mask/linear_1/bn"
+}
+
+layer{
+	name: "AttentionC_2/mask/linear_2"
+	type: "Convolution"
+	bottom: "AttentionC_2/mask/linear_1/bn"
+	top: "AttentionC_2/mask/linear_2"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/mask"
+	type: "TanH"
+	bottom: "AttentionC_2/mask/linear_2"
+	top: "AttentionC_2/mask"
+}
+
+layer{
+	name: "AttentionC_2_residual"
+	type: "Eltwise"
+	bottom: "AttentionC_2/trunk/res3"
+	bottom: "AttentionC_2/mask"
+	top: "AttentionC_2_residual"
+	eltwise_param {
+		operation: PROD
+	}
+}
+
+layer{
+	name: "AttentionC_2/fusion"
+	type: "Eltwise"
+	bottom: "AttentionC_2_residual"
+	bottom: "AttentionC_2/trunk/res3"
+	top: "AttentionC_2/fusion"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_2/fusion/bn"
+	type: "BN"
+	bottom: "AttentionC_2/fusion"
+	top: "AttentionC_2/fusion/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/fusion/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/fusion/bn"
+	top: "AttentionC_2/fusion/bn"
+}
+
+layer{
+	name: "AttentionC_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/fusion/bn"
+	top: "AttentionC_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_2/branch1/conv1_1x1"
+	top: "AttentionC_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_2/branch1/conv2_3x3"
+	top: "AttentionC_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_2"
+	type: "Eltwise"
+	bottom: "AttentionC_2/branch1/conv3_1x1"
+	bottom: "AttentionC_2/fusion"
+	top: "AttentionC_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_2/bn"
+	type: "BN"
+	bottom: "AttentionC_2"
+	top: "AttentionC_2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_2/bn"
+	top: "AttentionC_2/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_2/bn"
+	top: "AttentionC_3/trunk/res1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res1/branch1/conv1_1x1"
+	top: "AttentionC_3/trunk/res1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/trunk/res1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res1/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/trunk/res1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res1/branch1/conv2_3x3"
+	top: "AttentionC_3/trunk/res1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/trunk/res1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res1/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/trunk/res1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1"
+	type: "Eltwise"
+	bottom: "AttentionC_3/trunk/res1/branch1/conv3_1x1"
+	bottom: "AttentionC_2"
+	top: "AttentionC_3/trunk/res1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res1"
+	top: "AttentionC_3/trunk/res1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res1/bn"
+	top: "AttentionC_3/trunk/res1/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res1/bn"
+	top: "AttentionC_3/trunk/res2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res2/branch1/conv1_1x1"
+	top: "AttentionC_3/trunk/res2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/trunk/res2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res2/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/trunk/res2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res2/branch1/conv2_3x3"
+	top: "AttentionC_3/trunk/res2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/trunk/res2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res2/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/trunk/res2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2"
+	type: "Eltwise"
+	bottom: "AttentionC_3/trunk/res2/branch1/conv3_1x1"
+	bottom: "AttentionC_3/trunk/res1"
+	top: "AttentionC_3/trunk/res2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res2"
+	top: "AttentionC_3/trunk/res2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res2/bn"
+	top: "AttentionC_3/trunk/res2/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res2/bn"
+	top: "AttentionC_3/trunk/res3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res3/branch1/conv1_1x1"
+	top: "AttentionC_3/trunk/res3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/trunk/res3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res3/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/trunk/res3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_3/trunk/res3/branch1/conv2_3x3"
+	top: "AttentionC_3/trunk/res3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/trunk/res3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/trunk/res3/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/trunk/res3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/trunk/res3"
+	type: "Eltwise"
+	bottom: "AttentionC_3/trunk/res3/branch1/conv3_1x1"
+	bottom: "AttentionC_3/trunk/res2"
+	top: "AttentionC_3/trunk/res3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/pool1_3x3_s2"
+	type: "Pooling"
+	bottom: "AttentionC_3/trunk/res1"
+	top: "AttentionC_3/mask/down_sample/pool1_3x3_s2"
+	pooling_param {
+		pool: MAX
+		kernel_size: 3
+		stride: 2
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/pool1_3x3_s2/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionC_3/mask/down_sample/pool1_3x3_s2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/pool1_3x3_s2/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionC_3/mask/down_sample/pool1_3x3_s2/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/down_sample/pool1_3x3_s2/bn"
+	top: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1"
+	top: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3"
+	top: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/mask/down_sample/res1_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1"
+	type: "Eltwise"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/branch1/conv3_1x1"
+	bottom: "AttentionC_3/mask/down_sample/pool1_3x3_s2"
+	top: "AttentionC_3/mask/down_sample/res1_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/down_sample/res1_1"
+	top: "AttentionC_3/mask/down_sample/res1_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/bn"
+	top: "AttentionC_3/mask/down_sample/res1_1/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/down_sample/res1_1/bn"
+	top: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1"
+	top: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/down_sample/res1_2/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3"
+	top: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/down_sample/res1_2/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/mask/down_sample/res1_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/down_sample/res1_2"
+	type: "Eltwise"
+	bottom: "AttentionC_3/mask/down_sample/res1_2/branch1/conv3_1x1"
+	bottom: "AttentionC_3/mask/down_sample/res1_1"
+	top: "AttentionC_3/mask/down_sample/res1_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/up_sample/interp_1"
+	type: "Interp"
+	bottom: "AttentionC_3/mask/down_sample/res1_2"
+	bottom: "AttentionC_3/trunk/res3"
+	top: "AttentionC_3/mask/up_sample/interp_1"
+}
+
+layer{
+	name: "AttentionC_3/mask/up_sample/interp_1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/up_sample/interp_1"
+	top: "AttentionC_3/mask/up_sample/interp_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/up_sample/interp_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/up_sample/interp_1/bn"
+	top: "AttentionC_3/mask/up_sample/interp_1/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/linear_1"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/up_sample/interp_1/bn"
+	top: "AttentionC_3/mask/linear_1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/linear_1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/mask/linear_1"
+	top: "AttentionC_3/mask/linear_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask/linear_1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/mask/linear_1/bn"
+	top: "AttentionC_3/mask/linear_1/bn"
+}
+
+layer{
+	name: "AttentionC_3/mask/linear_2"
+	type: "Convolution"
+	bottom: "AttentionC_3/mask/linear_1/bn"
+	top: "AttentionC_3/mask/linear_2"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/mask"
+	type: "TanH"
+	bottom: "AttentionC_3/mask/linear_2"
+	top: "AttentionC_3/mask"
+}
+
+layer{
+	name: "AttentionC_3_residual"
+	type: "Eltwise"
+	bottom: "AttentionC_3/trunk/res3"
+	bottom: "AttentionC_3/mask"
+	top: "AttentionC_3_residual"
+	eltwise_param {
+		operation: PROD
+	}
+}
+
+layer{
+	name: "AttentionC_3/fusion"
+	type: "Eltwise"
+	bottom: "AttentionC_3_residual"
+	bottom: "AttentionC_3/trunk/res3"
+	top: "AttentionC_3/fusion"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_3/fusion/bn"
+	type: "BN"
+	bottom: "AttentionC_3/fusion"
+	top: "AttentionC_3/fusion/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/fusion/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/fusion/bn"
+	top: "AttentionC_3/fusion/bn"
+}
+
+layer{
+	name: "AttentionC_3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/fusion/bn"
+	top: "AttentionC_3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 256
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "AttentionC_3/branch1/conv1_1x1"
+	top: "AttentionC_3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "AttentionC_3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "AttentionC_3/branch1/conv1_1x1/bn"
+	top: "AttentionC_3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 256
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "AttentionC_3/branch1/conv2_3x3"
+	top: "AttentionC_3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "AttentionC_3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/branch1/conv2_3x3/bn"
+	top: "AttentionC_3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 1024
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "AttentionC_3"
+	type: "Eltwise"
+	bottom: "AttentionC_3/branch1/conv3_1x1"
+	bottom: "AttentionC_3/fusion"
+	top: "AttentionC_3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "AttentionC_3/bn"
+	type: "BN"
+	bottom: "AttentionC_3"
+	top: "AttentionC_3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "AttentionC_3/bn/relu"
+	type: "ReLU"
+	bottom: "AttentionC_3/bn"
+	top: "AttentionC_3/bn"
+}
+
+layer{
+	name: "post_res_4_1/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/bn"
+	top: "post_res_4_1/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_1/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "post_res_4_1/branch1/conv1_1x1"
+	top: "post_res_4_1/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_1/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_1/branch1/conv1_1x1/bn"
+	top: "post_res_4_1/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "post_res_4_1/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "post_res_4_1/branch1/conv1_1x1/bn"
+	top: "post_res_4_1/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 512
+		pad: 1
+		kernel_size: 3
+		stride: 2
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_1/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "post_res_4_1/branch1/conv2_3x3"
+	top: "post_res_4_1/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_1/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_1/branch1/conv2_3x3/bn"
+	top: "post_res_4_1/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "post_res_4_1/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "post_res_4_1/branch1/conv2_3x3/bn"
+	top: "post_res_4_1/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 2048
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_1/branch2/conv1_1x1"
+	type: "Convolution"
+	bottom: "AttentionC_3/bn"
+	top: "post_res_4_1/branch2/conv1_1x1"
+	convolution_param {
+		num_output: 2048
+		pad: 0
+		kernel_size: 1
+		stride: 2
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_1"
+	type: "Eltwise"
+	bottom: "post_res_4_1/branch2/conv1_1x1"
+	bottom: "post_res_4_1/branch1/conv3_1x1"
+	top: "post_res_4_1"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "post_res_4_1/bn"
+	type: "BN"
+	bottom: "post_res_4_1"
+	top: "post_res_4_1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_1/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_1/bn"
+	top: "post_res_4_1/bn"
+}
+
+layer{
+	name: "post_res_4_2/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "post_res_4_1/bn"
+	top: "post_res_4_2/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_2/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "post_res_4_2/branch1/conv1_1x1"
+	top: "post_res_4_2/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_2/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_2/branch1/conv1_1x1/bn"
+	top: "post_res_4_2/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "post_res_4_2/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "post_res_4_2/branch1/conv1_1x1/bn"
+	top: "post_res_4_2/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 512
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_2/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "post_res_4_2/branch1/conv2_3x3"
+	top: "post_res_4_2/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_2/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_2/branch1/conv2_3x3/bn"
+	top: "post_res_4_2/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "post_res_4_2/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "post_res_4_2/branch1/conv2_3x3/bn"
+	top: "post_res_4_2/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 2048
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_2"
+	type: "Eltwise"
+	bottom: "post_res_4_2/branch1/conv3_1x1"
+	bottom: "post_res_4_1"
+	top: "post_res_4_2"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "post_res_4_2/bn"
+	type: "BN"
+	bottom: "post_res_4_2"
+	top: "post_res_4_2/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_2/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_2/bn"
+	top: "post_res_4_2/bn"
+}
+
+layer{
+	name: "post_res_4_3/branch1/conv1_1x1"
+	type: "Convolution"
+	bottom: "post_res_4_2/bn"
+	top: "post_res_4_3/branch1/conv1_1x1"
+	convolution_param {
+		num_output: 512
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_3/branch1/conv1_1x1/bn"
+	type: "BN"
+	bottom: "post_res_4_3/branch1/conv1_1x1"
+	top: "post_res_4_3/branch1/conv1_1x1/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_3/branch1/conv1_1x1/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_3/branch1/conv1_1x1/bn"
+	top: "post_res_4_3/branch1/conv1_1x1/bn"
+}
+
+layer{
+	name: "post_res_4_3/branch1/conv2_3x3"
+	type: "Convolution"
+	bottom: "post_res_4_3/branch1/conv1_1x1/bn"
+	top: "post_res_4_3/branch1/conv2_3x3"
+	convolution_param {
+		num_output: 512
+		pad: 1
+		kernel_size: 3
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_3/branch1/conv2_3x3/bn"
+	type: "BN"
+	bottom: "post_res_4_3/branch1/conv2_3x3"
+	top: "post_res_4_3/branch1/conv2_3x3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_3/branch1/conv2_3x3/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_3/branch1/conv2_3x3/bn"
+	top: "post_res_4_3/branch1/conv2_3x3/bn"
+}
+
+layer{
+	name: "post_res_4_3/branch1/conv3_1x1"
+	type: "Convolution"
+	bottom: "post_res_4_3/branch1/conv2_3x3/bn"
+	top: "post_res_4_3/branch1/conv3_1x1"
+	convolution_param {
+		num_output: 2048
+		pad: 0
+		kernel_size: 1
+		stride: 1
+		bias_term: false
+	}
+}
+
+layer{
+	name: "post_res_4_3"
+	type: "Eltwise"
+	bottom: "post_res_4_3/branch1/conv3_1x1"
+	bottom: "post_res_4_2"
+	top: "post_res_4_3"
+	eltwise_param {
+		operation: SUM
+	}
+}
+
+layer{
+	name: "post_res_4_3/bn"
+	type: "BN"
+	bottom: "post_res_4_3"
+	top: "post_res_4_3/bn"
+	bn_param {
+		frozen: true
+	}
+}
+
+layer{
+	name: "post_res_4_3/bn/relu"
+	type: "ReLU"
+	bottom: "post_res_4_3/bn"
+	top: "post_res_4_3/bn"
+}
+
+layer{
+	name: "ave_pool"
+	type: "Pooling"
+	bottom: "post_res_4_3/bn"
+	top: "ave_pool"
+	pooling_param {
+		pool: AVE
+		kernel_size: 7
+		stride: 1
+	}
+}
+
+layer{
+	name: "classifier"
+	type: "InnerProduct"
+	bottom: "ave_pool"
+	top: "classifier"
+	inner_product_param {
+		num_output: 1000
+	}
+}
+
+layer{
+	name: "cls"
+	type: "Softmax"
+	bottom: "classifier"
+	top: "cls"
+}
+
