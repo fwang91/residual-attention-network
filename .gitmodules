@@ -1,4 +1,4 @@
 [submodule "caffe"]
 	path = caffe
-	url = https://github.com/buptwangfei/caffe.git 
+	url = https://github.com/buptwangfei/caffe.git
 	branch = master
