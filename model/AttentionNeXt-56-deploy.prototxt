@@ -1622,7 +1622,7 @@ layer{
 
 layer{
 	name: "AttentionA_1/mask"
-	type: "TanH"
+	type: "Sigmoid"
 	bottom: "AttentionA_1/mask/linear_2"
 	top: "AttentionA_1/mask"
 }
@@ -2953,7 +2953,7 @@ layer{
 
 layer{
 	name: "AttentionB_1/mask"
-	type: "TanH"
+	type: "Sigmoid"
 	bottom: "AttentionB_1/mask/linear_2"
 	top: "AttentionB_1/mask"
 }
@@ -3902,7 +3902,7 @@ layer{
 
 layer{
 	name: "AttentionC_1/mask"
-	type: "TanH"
+	type: "Sigmoid"
 	bottom: "AttentionC_1/mask/linear_2"
 	top: "AttentionC_1/mask"
 }
