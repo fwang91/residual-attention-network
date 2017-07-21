@@ -29,7 +29,9 @@ If you find "Residual Attention Network" useful in your research, please cite:
 
 
 ### Main Performance
+
 0. Evaluation on ImageNet validation dataset.
+
 |    Network       |Test Size|  top-1  |  top-5  |
 |------------------|---------|---------|---------|
 | Attention-56     | 224\*224|  21.76% |   5.9%  |
