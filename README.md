@@ -1,4 +1,4 @@
-# AttentionNet
+# Residual Attention Network
 Residual Attention Network for Image Classification (**CVPR-2017 Spotlight**)
 
 By Fei Wang, Mengqing Jiang, Chen Qian, Shuo Yang, Chen Li, Honggang Zhang, Xiaogang Wang, Xiaoou Tang
@@ -21,8 +21,15 @@ If you find "Residual Attention Network" useful in your research, please cite:
   		year={2017}	
 	}
 
-### Main Performance
+### Models
+0. Attention-56 and Attention-92 are based on the pre-activation residual unit. 
 
+1. According to the paper, we replace pre-activation residual unit with resnext unit to contruct the AttentionNeXt-56 and AttentionNeXt-92.
+
+
+
+### Main Performance
+0. Evaluation on ImageNet validation dataset.
 |    Network       |Test Size|  top-1  |  top-5  |
 |------------------|---------|---------|---------|
 | Attention-56     | 224\*224|  21.76% |   5.9%  |
@@ -37,4 +44,6 @@ If you find "Residual Attention Network" useful in your research, please cite:
 
 3. The scale augmentation and ratio augmentation are used in the training process.
 
-4. If you want to train Residual Attention Network, you should use my caffe code and add data augmentation described in the paper. I think it is easy to reproduce the performance on the ImageNet validation dataset.
+4. The mini-batch of per GPU should be at least 32 images. 
+
+5. If you want to train Residual Attention Network, you should use my caffe code and add data augmentation described in the paper. I think it is easy to reproduce the performance on the ImageNet validation dataset.
